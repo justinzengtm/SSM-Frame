@@ -1,5 +1,4 @@
 package com.mybatis.po;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,26 +15,29 @@ public class User implements Serializable {
 	private String province;
 	private String city;
 	private Date birthday;
+	private int age;
 	
 	public User() {
-		
+		System.out.println("进入目标类无参数构造方法....");
 	}
 	// 构造方法初始化
-	public User(int id, String username, String password, String gender, String email, String province,
+	public User(String username, String password, String gender, String email, String province,
 			String city, Date birthday) {
 		super();
-		this.id = id;
+		System.out.println("进入目标类有参数构造方法....");
 		this.username = username;
 		this.password = password;
 		this.gender = gender;
 		this.email = email;
 		this.province = province;
+		this.city = city;
 		this.birthday = birthday;
 	}
 	
 	public int getId() {
 		return id;
 	}
+	
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -82,10 +84,17 @@ public class User implements Serializable {
 		this.city = city;
 	}
 	
-	public Date getbirthday() {
+	public Date getBirthday() {
 		return birthday;
 	}
-	public void setbirthday(Date birthday) {
+	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
+	}
+	
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
 	}
 }
