@@ -4,25 +4,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="SQLtest">
-    <select id="findUserById" parameterType="int" resultType="com.mybatis.po.User">
-        SELECT * FROM USER WHERE id=#{id}
+
+	<!-- id是resultMap的标识id -->
+	<resultMap type="com.mybatis.po.User" id="userMap">
+	<!-- id为配置主键,column为主键在数据库中的字段名,property为主键在Java类中的属性名 -->
+	<id column="id" property="id"/>
+	</resultMap>
+	
+    <select id="findUserById" parameterType="int" resultType="user">
+        SELECT username, password, gender, birthday, email, province, city
+         FROM USER WHERE id=#{id}
     </select>
     
-    <insert id="insertUser" parameterType="com.mybatis.po.User">
-    	INSERT INTO USER(username, password, gender, birthday, email, province, city)
-    	VALUE(#{username}, #{password}, #{gender}, #{birthday,jdbcType=DATE}, #{email}, #{province},
-    	#{city})
+    <select id="multiSearch" resultType="user">
+    	SELECT * FROM USER
+    </select>
+    
+    <insert id="insertUser" parameterType="user">
+    	INSERT INTO USER(username, password, gender, birthday, email, province, city, age)
+    	VALUE(#{username}, #{password}, #{gender}, #{birthday, jdbcType=DATE}, #{email}, #{province},
+    	#{city}, #{age})
     </insert>
     
-    <delete id="deleteUser" parameterType="java.lang.String">
+    <delete id="deleteUser" parameterType="string">
     	DELETE FROM USER WHERE username=#{value}
     </delete>
     
-    <update id="updateUser" parameterType="com.mybatis.po.User">
+    <update id="updateUser" parameterType="user">
     	UPDATE USER SET gender=#{gender} WHERE id=#{id}
     </update>
     
-    <select id="multiSearch" resultType="com.mybatis.po.User">
-    	SELECT * FROM USER
-    </select>
 </mapper>
