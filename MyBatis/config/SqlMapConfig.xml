@@ -8,8 +8,22 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<!-- 配置日志输出模式logImpl为LOG4J -->
 		<setting name="logImpl" value="LOG4J" />
 	</settings>
+	<!-- 批量定义别名  -->
+	<typeAliases>
+		<package name="com.mybatis.po"/>
+	</typeAliases>
+	<!-- 配置自定义类型处理器 -->
+	<typeHandlers>
+		<typeHandler handler="com.mybatis.typeHandlers.DateTypeHandler" 
+		javaType="java.util.Date" jdbcType="VARCHAR"/>
+	</typeHandlers>
+	<!-- 配置对象工厂 -->
+	<objectFactory type="com.mybatis.test.UserObjectFactory">
+		<property name="userName" value="zzzjustin_z"/>
+	</objectFactory>
 	<!-- 配置环境信息 -->
 	<environments default="development">
+	<!-- 每一个environment代表一个数据库环境的配置信息 ,其中包含事务管理器和数据源信息-->
 		<environment id="development">
 			<!-- 使用JDBC事务管理 -->
 			<transactionManager type="JDBC" />
