@@ -6,12 +6,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
+import org.junit.Test;
 import com.mybatis.datasource.DataConnection;
 import com.mybatis.po.User;
 
-public class MyBatisTest {
+public class MyBatisTestUser {
 	public DataConnection dataConn = new DataConnection();
 	
+	@Test
+	// 查询单个用户
 	public void TestSelect() throws IOException {
 		SqlSession sqlSession = dataConn.getSqlSession();
 		User user = sqlSession.selectOne("SQLtest.findUserById", 1);
@@ -31,6 +34,7 @@ public class MyBatisTest {
 		sqlSession.close();
 	}
 	
+	// 用户表删除
 	public void TestDelete() throws IOException {
 		SqlSession sqlSession = dataConn.getSqlSession();
 		sqlSession.delete("SQLtest.deleteUser", "测试用户");
@@ -38,6 +42,7 @@ public class MyBatisTest {
 		sqlSession.close();
 	}
 	
+	// 用户表更新
 	public void TestUpdate() throws IOException {
 		SqlSession sqlSession = dataConn.getSqlSession();
 		User user = new User();
@@ -49,6 +54,7 @@ public class MyBatisTest {
 		sqlSession.close();
 	}
 	
+	// 用户表插入
 	public void TestInsert() throws IOException, ParseException {
 		SqlSession sqlSession = dataConn.getSqlSession();
 
@@ -68,6 +74,7 @@ public class MyBatisTest {
 		sqlSession.close();
 	}
 	
+	// 用户表多个查询
 	public void TestMultiSelect() throws IOException {
 		SqlSession sqlSession = dataConn.getSqlSession();
 		List<User> resultList = sqlSession.selectList("SQLtest.multiSearch");
@@ -93,9 +100,9 @@ public class MyBatisTest {
 	}
 	
 	public static void main(String[] args) throws IOException, ParseException {
-		MyBatisTest testBatis = new MyBatisTest();
-//		testBatis.TestMultiSelect();
-		testBatis.TestSelect();
+		MyBatisTestUser testBatis = new MyBatisTestUser();
+		testBatis.TestMultiSelect();
+//		testBatis.TestSelect();
 //		testBatis.TestDelete();
 //		testBatis.TestUpdate();
 //		testBatis.TestInsert();
