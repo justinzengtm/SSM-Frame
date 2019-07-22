@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ShoppingCartTest">
+	<!-- resultMap配置查询返回结果中列名和Java类中属性名的映射关系,type是最终映射的Java类型 -->
+	<resultMap type="shoppingCartInstance" id="shoppingCartResult">
+		<!-- id是查询返回的结果集中的主键 -->
+		<id property="cartId" column="cart_id"/>
+		<!-- result标签对是对普通列的定义,column是查询结果集的列名,property是映射Java类型中的属性名 -->
+		<result property="productName" column="product_name"/>
+		<result property="price" column="product_price"/>
+		<result property="number" column="product_number"/>
+		<!-- association标签：关联的嵌套结果配置 -->
+		<association property="user" column="cartUser_id" javaType="com.mybatis.po.User" 
+		resultMap="userResult"/>
+	</resultMap>
+	
+	<resultMap type="com.mybatis.po.User" id="userResult">
+		<id property="id" column="user_id"/>
+		<!-- 配置User类中的映射关系 -->
+		<result property="username" column="user_name"/>
+		<result property="gender" column="user_gender"/>
+		<result property="province" column="user_province"/>
+		<result property="city" column="user_city"/>
+	</resultMap>
+	
+	<select id="queryShoppingCartInstance" parameterType="int" resultMap="shoppingCartResult">
+		SELECT
+			S.cartId	as cart_id,
+			S.productName	as product_name,
+			S.userId	as cartUser_id,
+			S.price	as product_price,
+			S.number	as product_number,
+			U.id	as user_id,
+			U.username	as user_name,
+			U.gender	as user_gender,
+			U.province	as user_province,
+			U.city	as user_city
+		FROM ShoppingCart S left outer join user U on S.userId = U.id 
+		WHERE S.userId = #{id}
+	</select>
+	
+	<select id="queryShoppingCart" parameterType="int" resultType="shoppingCart">
+		SELECT productName, price, number FROM ShoppingCart WHERE userId=#{userId}
+	</select>
+
+</mapper>
