@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductTest">
+	
+	<resultMap type="productInstance" id="productResult">
+		<id property="id" column="p_id"/>
+		<result property="productId" column="product_id"/>
+		<result property="productName" column="product_name"/>
+		<result property="productPrice" column="product_price"/>
+		<collection property="appraiseList" ofType="com.mybatis.po.ProductAppraise" 
+		resultMap="ProductAppraiseResult"/>
+	</resultMap>
+	
+	<resultMap type="productAppraise" id="ProductAppraiseResult">
+		<id property="id" column="pa_id"/>
+		<result property="productId" column="productAppraise_id"/>
+		<result property="productScore" column="product_score"/>
+		<result property="userId" column="user_id"/>
+	</resultMap>
+	
+	<select id="queryProductInstance" parameterType="int" resultMap="productResult">
+		SELECT
+			P.productId	as product_id,
+			P.productName	as product_name,
+			P.productPrice	as product_price,
+			PA.productScore	as product_score,
+			PA.productId	as productAppraise_id,
+			PA.userId	as user_id
+		FROM Products P LEFT OUTER JOIN ProductAppraise PA on P.productId=PA.productId
+		WHERE P.productId=#{id}
+	</select>
+	
+	<select id="queryProductInfo" resultMap="productResult">
+		SELECT 
+			productId	as product_id,
+			productName	as product_name,
+			productPrice	as product_price
+		FROM Products
+	</select>
+	
+	<select id="queryProductInfo_2" resultType="product">
+		SELECT * FROM Products
+	</select>
+	
+</mapper>
