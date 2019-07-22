@@ -41,5 +41,8 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 <mappers>
 	<!-- Mapper映射文件的声明,配置Mapper.xml的路径,Mapper.xml文件中配置SQL语句,输入参数和输出结果类型等信息 -->
     <mapper resource="sqlmap/UserMapper.xml"/>
+    <mapper resource="sqlmap/ShoppingCartMapper.xml"/>
+    <mapper resource="sqlmap/ProductMapper.xml"/>
+    <mapper resource="sqlmap/ProductAppraiseMapper.xml"/>
 </mappers>
 </configuration>
