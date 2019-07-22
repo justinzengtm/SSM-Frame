@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductAppraiseTest">
+	<resultMap type="productAppraise" id="ProductAppraiseResult">
+		<id property="id" column="pa_id"/>
+		<result property="productId" column="product_id"/>
+		<result property="productScore" column="product_score"/>
+		<result property="userId" column="user_id"/>
+	</resultMap>
+	
+	<select id="queryProductAppraiseInfo" parameterType="int" resultType="productAppraise">
+		SELECT productScore, userId FROM ProductAppraise WHERE productId=#{productId}
+	</select>
+</mapper>
