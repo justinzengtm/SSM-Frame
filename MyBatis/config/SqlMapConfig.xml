@@ -44,5 +44,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     <mapper resource="sqlmap/ShoppingCartMapper.xml"/>
     <mapper resource="sqlmap/ProductMapper.xml"/>
     <mapper resource="sqlmap/ProductAppraiseMapper.xml"/>
+    <mapper resource="sqlmap/UserDiscriminatorMapper.xml"/>
 </mappers>
 </configuration>
