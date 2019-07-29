@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="UserDiscriminatorTest">
+	<!-- 基本discriminator配置 -->
+	<resultMap type="com.mybatis.po.UserDiscriminator" id="userDiscriminatorResultMap1">
+		<id property="id" column="user_id"/>
+		<result property="username" column="user_name"/>
+		<result property="gender" column="user_gender"/>
+		<result property="email" column="user_email"/>
+		<discriminator javaType="int" column="user_id">
+			<case value="1" resultType="userDiscriminator1">
+				<result property="province" column="user_province"/>
+				<result property="city" column="user_city"/>
+			</case>
+			<case value="2" resultType="userDiscriminator2">
+				<result property="birthday" column="user_birthday"/>
+				<result property="age" column="user_age"/>
+			</case>
+		</discriminator>
+	</resultMap>
+	
+	<!-- 引用外部resultMap配置 -->
+	<resultMap type="com.mybatis.po.UserDiscriminator" id="userDiscriminatorResultMap2">
+		<id property="id" column="user_id"/>
+		<result property="username" column="user_name"/>
+		<result property="gender" column="user_gender"/>
+		<result property="email" column="user_email"/>
+		<discriminator javaType="int" column="user_id">
+			<case value="1" resultMap="userResultMap1"/>
+			<case value="2" resultMap="userResultMap2"/>
+		</discriminator>
+	</resultMap>
+	
+	<!-- 级联，关联的嵌套结果集中配置discriminator -->
+	<resultMap type="com.mybatis.po.UserDiscriminator" id="userDiscriminatorResultMap3">
+		<id property="id" column="user_id"/>
+		<result property="username" column="user_name"/>
+		<result property="gender" column="user_gender"/>
+		<result property="email" column="user_email"/>
+		<association property="userInfo" javaType="java.util.HashMap">
+			<discriminator javaType="int" column="user_id">
+				<case value="1" resultMap="userResultMap3"/>
+				<case value="2" resultMap="userResultMap4"/>
+			</discriminator>
+		</association>
+	</resultMap>
+	
+	<resultMap id="userResultMap1" type="com.mybatis.po.UserDiscriminator1" 
+		extends="userDiscriminatorResultMap2">
+		<result property="province" column="user_province"/>
+		<result property="city" column="user_city"/>
+	</resultMap>
+	
+	<resultMap id="userResultMap2" type="com.mybatis.po.UserDiscriminator2" 
+		extends="userDiscriminatorResultMap2">
+		<result property="birthday" column="user_birthday"/>
+		<result property="age" column="user_age"/>
+	</resultMap>
+	
+	<resultMap id="userResultMap3" type="java.util.HashMap">
+		<result property="province" column="user_province"/>
+		<result property="city" column="user_city"/>
+	</resultMap>
+	
+	<resultMap id="userResultMap4" type="java.util.HashMap">
+		<result property="birthday" column="user_birthday"/>
+		<result property="age" column="user_age"/>
+	</resultMap>
+	
+	<select id="queryUserPosition" parameterType="int" resultMap="userDiscriminatorResultMap3">
+		select 
+			U.id as user_id, 
+			U.username as user_name, 
+			U.gender as user_gender, 
+			U.email as user_email,
+			U.province as user_province,
+			U.city as user_city
+		FROM USER U WHERE U.id=#{id}
+	</select>
+	
+	<select id="queryUserInfo" parameterType="int" resultMap="userDiscriminatorResultMap3">
+		select 
+			U.id as user_id, 
+			U.username as user_name, 
+			U.gender as user_gender, 
+			U.email as user_email,
+			U.birthday as user_birthday,
+			U.age as user_age
+		FROM USER U WHERE U.id=#{id}
+	</select>
+</mapper>
