@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 测试用例: com.mybatis.po/MyBatisTestUserActiveSQL.java -->
+<mapper namespace="com.mybatis.po.User">
+	<resultMap type="com.mybatis.po.User" id="UserActiveResultMap">
+		<id property="id" column="user_id"/>
+		<result property="username" column="user_name"/>
+		<result property="gender" column="user_gender"/>
+		<result property="email" column="user_email"/>
+		<result property="city" column="user_city"/>
+	</resultMap>
+	
+	<select id="UserActiveSearch_if" parameterType="User" resultType="User">
+		SELECT 
+			U.username,
+			U.gender,
+			U.email,
+			U.city
+		FROM User U 
+		<where>
+			<if test="city != null">
+				U.city = #{city}
+			</if>
+			<if test="username != null">
+				AND U.username like #{username}
+			</if>
+		</where>
+	</select>
+	
+	<select id="UserActiveSearch_choose" parameterType="User" resultMap="UserActiveResultMap">
+		SELECT 
+			U.username as user_name,
+			U.gender as user_gender,
+			U.email as user_email,
+			U.city as user_city
+		FROM User U 
+		<where>
+			<choose>
+				<when test="username != null and username != ''">
+					username = #{username}
+				</when>
+				<when test="email != null and email != ''">
+					AND email = #{email}
+				</when>
+				<otherwise>
+					AND id = 6
+				</otherwise>
+			</choose>
+		</where>
+	</select>
+	
+	<select id="UserActive_foreach" resultMap="UserActiveResultMap">
+		SELECT
+			U.id as user_id,
+			U.username as user_name,
+			U.gender as user_gender,
+			U.email as user_email,
+			U.city as user_city
+		FROM User U WHERE id in(1,3,5)
+	</select>
+	
+	<!-- 拼接  WHERE (id=1 or id=3 or id=5) -->
+	<select id="UserActive_foreach1" resultMap="UserActiveResultMap">
+		SELECT
+			U.id as user_id,
+			U.username as user_name,
+			U.gender as user_gender,
+			U.email as user_email,
+			U.city as user_city
+		FROM User U 
+		<where>
+			<foreach collection="list" item="user_id" open="(" separator="or" close=")">
+				<!-- 每次遍历时拼接上去的字符串 -->
+				id=#{user_id}
+			</foreach>
+		</where>
+	</select>
+	
+	<!-- 拼接  WHERE id in (1,3,5) -->
+	<select id="UserActive_foreach2" resultMap="UserActiveResultMap">
+		SELECT
+			U.id as user_id,
+			U.username as user_name,
+			U.gender as user_gender,
+			U.email as user_email,
+			U.city as user_city
+		FROM User U 
+		<where>
+			<foreach collection="list" item="user_id" open="id in (" separator="," close=")">
+				<!-- 每次遍历时拼接上去的字符串 -->
+				#{user_id}
+			</foreach>
+		</where>
+	</select>
+	
+	<select id="UserActiveSearch_if2" parameterType="User" resultType="User">
+		SELECT 
+			U.username,
+			U.gender,
+			U.email,
+			U.city
+		FROM User U WHERE
+		<if test="city != null">
+			U.city = #{city}
+		</if>
+		<if test="username != null">
+			AND U.username = #{username}
+		</if>
+	</select>
+	
+</mapper>
