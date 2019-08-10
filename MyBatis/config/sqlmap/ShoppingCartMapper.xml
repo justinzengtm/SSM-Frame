@@ -7,14 +7,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- resultMap配置查询返回结果中列名和Java类中属性名的映射关系,type是最终映射的Java类型 -->
 	<resultMap type="shoppingCartInstance" id="shoppingCartResult">
 		<!-- id是查询返回的结果集中的主键 -->
-		<id property="cartId" column="cart_id"/>
+		<id property="id" column="shoppingCart_id"/>
 		<!-- result标签对是对普通列的定义,column是查询结果集的列名,property是映射Java类型中的属性名 -->
+		<result property="cartId" column="cart_id"/>
 		<result property="productName" column="product_name"/>
 		<result property="price" column="product_price"/>
 		<result property="number" column="product_number"/>
+		<result property="productId" column="product_id"/>
 		<!-- association标签：关联的嵌套结果配置 -->
 		<association property="user" column="cartUser_id" javaType="com.mybatis.po.User" 
 		resultMap="userResult"/>
+		<association property="products" column="cartUser_id" javaType="com.mybatis.po.Product">
+			<result property="productId" column="products_id"/>
+		</association>
 	</resultMap>
 	
 	<resultMap type="com.mybatis.po.User" id="userResult">
@@ -26,7 +31,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="city" column="user_city"/>
 	</resultMap>
 	
-	<select id="queryShoppingCartInstance" parameterType="int" resultMap="shoppingCartResult">
+	<!-- 一对多映射配置 -->
+	<resultMap type="shoppingCartInstance" id="multiShoppingCartResult" 
+	extends="shoppingCartResult">
+		<collection property="productAppraise" ofType="ProductAppraise">
+			<!-- 主键 -->
+			<id column="id" property="id"/>
+			<result property="productId" column="productAppraise_id"/>
+			<result property="productScore" column="product_score"/>
+			<result property="userId" column="user_id"/>
+		</collection>
+	</resultMap>
+	
+	<!-- 一对一查询：resultType实现 -->
+	<select id="queryShoppingCartInstance1" parameterType="int" resultType="ShoppingCartInstance">
+		SELECT
+			S.cartId, S.productName, S.userId, S.price, S.number,
+			U.id, U.username, U.gender, U.province, U.city
+		FROM ShoppingCart S left outer join user U on S.userId = U.id 
+		WHERE S.cartId = #{id}
+	</select>
+	
+	<!-- 一对多查询SQL语句 -->
+	<select id="queryShoppingCartInstance2" parameterType="int" resultMap="shoppingCartResult">
 		SELECT
 			S.cartId	as cart_id,
 			S.productName	as product_name,
@@ -39,7 +66,46 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			U.province	as user_province,
 			U.city	as user_city
 		FROM ShoppingCart S left outer join user U on S.userId = U.id 
-		WHERE S.userId = #{id}
+		WHERE S.cartId = #{id}
+	</select>
+	
+	<!-- 一对多查询SQL示例语句 -->
+	<select id="queryShoppingCartInstance3" parameterType="int" resultMap="multiShoppingCartResult">
+		SELECT
+			S.cartId	as cart_id,
+			S.productName	as product_name,
+			S.userId	as cartUser_id,
+			S.price	as product_price,
+			S.number	as product_number,
+			S.productId as product_id,
+			U.id	as user_id,
+			U.username	as user_name,
+			U.gender	as user_gender,
+			U.province	as user_province,
+			U.city	as user_city,
+			A.productId as productAppraise_id,
+			A.productScore	as product_score
+		FROM ProductAppraise A, ShoppingCart S, user U 
+		WHERE S.userId = U.id AND S.productId = A.productId AND S.cartId = #{id}
+	</select>
+	
+	<!-- 多对多查询SQL示例语句 -->
+	<select id="queryShoppingCartInstance4" resultMap="shoppingCartResult">
+		SELECT
+			S.cartId	as cart_id,
+			S.productName	as product_name,
+			S.userId	as cartUser_id,
+			S.price	as product_price,
+			S.number	as product_number,
+			S.productId as product_id,
+			U.id	as user_id,
+			U.username	as user_name,
+			U.gender	as user_gender,
+			U.province	as user_province,
+			U.city	as user_city,
+			P.productId as products_id
+		FROM Products P, ShoppingCart S, user U 
+		WHERE S.userId = U.id AND S.productId = P.productId
 	</select>
 	
 	<select id="queryShoppingCart" parameterType="int" resultType="shoppingCart">
