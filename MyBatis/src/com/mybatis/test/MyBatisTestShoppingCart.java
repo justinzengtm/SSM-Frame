@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import com.mybatis.datasource.DataConnection;
+import com.mybatis.po.ProductAppraise;
 import com.mybatis.po.ShoppingCart;
 import com.mybatis.po.ShoppingCartInstance;
 
@@ -37,21 +38,29 @@ public class MyBatisTestShoppingCart {
 	// 关联的嵌套结果
 	public void TestAssociationQuery() throws IOException {
 		SqlSession sqlSession = dataConn.getSqlSession();
-		List<ShoppingCartInstance> resultList = sqlSession.selectList("queryShoppingCartInstance", 2);
+		List<ShoppingCartInstance> resultList = sqlSession.selectList("queryShoppingCartInstance4");
 		StringBuffer result = new StringBuffer();
 		double totalAmount;
 		
-		System.out.println("顾客姓名： " + resultList.get(1).getUser().getUsername());
-		System.out.println("性别： " + resultList.get(1).getUser().getGender());
-		System.out.println("商品清单：" + "\r\n");
+//		System.out.println("顾客姓名： " + resultList.get(0).getUser().getUsername());
+//		System.out.println("性别： " + resultList.get(0).getUser().getGender());
+//		System.out.println("商品清单：" + "\r\n");
 		
 		for(int i=0; i<resultList.size(); i++) {
 			ShoppingCartInstance shoppingCartInstance = resultList.get(i);
+			result.append("顾客姓名： " + shoppingCartInstance.getUser().getUsername() + "\r\n");
+			result.append("性别： " + shoppingCartInstance.getUser().getGender() + "\r\n");
+			result.append("商品id：" + shoppingCartInstance.getProducts().getProductId() + "\r\n");
 			result.append("商品名：" + shoppingCartInstance.getProductName() + "\r\n");
-			result.append("商品价格：" + shoppingCartInstance.getPrice() + "\r\n");
 			result.append("商品数量：" + shoppingCartInstance.getNumber() + "\r\n");
 			totalAmount = (shoppingCartInstance.getPrice()*shoppingCartInstance.getNumber());
 			result.append("商品总价：" + String.format("%.2f", totalAmount) + "\r\n");
+			
+//			List<ProductAppraise> appraiseList = shoppingCartInstance.getProductAppraise();
+//			for(int j=0; j<appraiseList.size(); j++) {
+//				ProductAppraise productAppraise = appraiseList.get(j);
+//				System.out.println("商品评分：" + productAppraise.getProductScore());
+//			}
 			
 			System.out.println(result.toString());
 			result.setLength(0);
