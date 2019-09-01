@@ -7,6 +7,11 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	<settings>
 		<!-- 配置日志输出模式logImpl为LOG4J -->
 		<setting name="logImpl" value="LOG4J" />
+		<!-- 深度延迟加载 -->
+		<!-- 打开延迟加载 -->
+		<setting name="lazyLoadingEnabled" value="true"/>
+		<!-- 积极加载/按需加载配置 -->
+		<setting name="aggressiveLazyLoading" value="true"/>
 	</settings>
 	<!-- 批量定义别名  -->
 	<typeAliases>
@@ -46,5 +51,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     <mapper resource="sqlmap/ProductAppraiseMapper.xml"/>
     <mapper resource="sqlmap/UserDiscriminatorMapper.xml"/>
     <mapper resource="SQLActiveMapper/UserActiveMapper.xml"/>
+    <mapper resource="sqlmap/LazyLoadingMapper.xml"/>
 </mappers>
 </configuration>
