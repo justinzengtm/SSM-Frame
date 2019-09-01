@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 购物清单关联用户，延迟加载测试用例mapper配置 -->
+<!-- 延迟加载resultMap -->
+<mapper namespace="com.mybatis.po.ShoppingCartUserLazyLoadingTest">
+	<resultMap id="ShoppingCartUserLazyLoadingMap" type="shoppingCartUserLazyLoading">
+		<!-- 商品清单信息字段映射配置 -->
+		<id property="id" column="shoppingCart_id"/>
+		<result property="cartId" column="cart_id"/>
+		<result property="userId" column="cartUser_id"/>
+		<result property="productName" column="product_name"/>
+		<result property="price" column="product_price"/>
+		<result property="number" column="product_number"/>
+		<result property="productId" column="product_id"/>
+		<!-- association标签延迟加载商品清单信息 -->
+		<association property="user" column="cartUser_id" javaType="com.mybatis.po.User" 
+		select="searchUserById">
+		</association>
+	</resultMap>
+	
+	<!-- 延迟加载查询商品清单SQL语句 -->
+	<select id="searchLazyLoading" resultMap="ShoppingCartUserLazyLoadingMap">
+		SELECT
+			S.cartId	as cart_id,
+			S.productName	as product_name,
+			S.userId	as cartUser_id,
+			S.price	as product_price,
+			S.number	as product_number
+		FROM ShoppingCart S
+	</select>
+	
+	<!-- 延迟加载查询用户信息SQL语句 -->
+	<select id="searchUserById" parameterType="int" resultType="com.mybatis.po.User">
+		SELECT 
+			U.username, 
+			U.email, 
+			U.city
+		FROM user U WHERE U.id = #{id}
+	</select>
+</mapper>
