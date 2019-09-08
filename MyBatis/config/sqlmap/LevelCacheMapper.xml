@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mybatis.po.LevelCacheMapper">
+	<!-- 二级缓存配置 -->
+	<cache eviction="LRU" flushInterval="60000" size="1024" readOnly="true"/>
+	<!-- 
+		1、eviction：缓存回收策略,有LRU最近最少使用法、FIFO先进先出等。
+		2、flushInterval：缓存刷新间隔,单位为毫秒。
+		3、size：缓存存储大小。
+		4、readOnly：缓存只读。
+	 -->
+	 
+	<resultMap type="productInstance" id="productResult">
+		<id property="id" column="p_id"/>
+		<result property="productId" column="product_id"/>
+		<result property="productName" column="product_name"/>
+		<result property="productPrice" column="product_price"/>
+		<collection property="appraiseList" ofType="com.mybatis.po.ProductAppraise" 
+		resultMap="ProductAppraiseResult"/>
+	</resultMap>
+	
+	<resultMap type="productAppraise" id="ProductAppraiseResult">
+		<id property="id" column="pa_id"/>
+		<result property="productId" column="productAppraise_id"/>
+		<result property="productScore" column="product_score"/>
+		<result property="userId" column="user_id"/>
+	</resultMap>
+	
+	<select id="queryProductInstance" parameterType="int" resultMap="productResult">
+		SELECT
+			P.productId	as product_id,
+			P.productName	as product_name,
+			P.productPrice	as product_price,
+			PA.productScore	as product_score,
+			PA.productId	as productAppraise_id,
+			PA.userId	as user_id
+		FROM Products P LEFT OUTER JOIN ProductAppraise PA on P.productId=PA.productId
+		WHERE P.productId=#{id}
+	</select>
+	
+	<update id="updateProductInstance" parameterType="Product">
+		UPDATE products SET productPrice=#{productPrice} WHERE productId=#{productId}
+	</update>
+</mapper>
