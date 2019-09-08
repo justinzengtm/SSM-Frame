@@ -52,5 +52,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     <mapper resource="sqlmap/UserDiscriminatorMapper.xml"/>
     <mapper resource="SQLActiveMapper/UserActiveMapper.xml"/>
     <mapper resource="sqlmap/LazyLoadingMapper.xml"/>
+    <mapper resource="sqlmap/LevelCacheMapper.xml"/>
 </mappers>
 </configuration>
