@@ -44,4 +44,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateProductInstance" parameterType="Product">
 		UPDATE products SET productPrice=#{productPrice} WHERE productId=#{productId}
 	</update>
+	
 </mapper>
