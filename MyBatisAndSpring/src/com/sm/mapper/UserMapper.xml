@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sm.po.UserMapper">
+
+	<resultMap type="com.sm.po.User" id="userResult">
+		<id property="id" column="user_id"/>
+		<result property="username" column="user_name"/>
+		<result property="gender" column="user_gender"/>
+		<result property="email" column="user_email"/>
+		<result property="province" column="user_province"/>
+		<result property="city" column="user_city"/>
+	</resultMap>
+	
+    <select id="findUserById" parameterType="int" resultMap="userResult">
+        SELECT
+        	U.username as user_name,  
+        	U.gender as user_gender,  
+        	U.email as user_email, 
+        	U.province as user_province, 
+        	U.city as user_city
+         FROM USER U WHERE id=#{id};
+    </select>
+    
+    <select id="multiSearch" resultType="user">
+    	SELECT * FROM USER;
+    </select>
+    
+</mapper>
