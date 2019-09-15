@@ -27,5 +27,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="multiSearch" resultType="user">
     	SELECT * FROM USER;
     </select>
-    
+     
 </mapper>
