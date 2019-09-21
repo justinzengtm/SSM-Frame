@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+  
+<generatorConfiguration>
+	<!-- 每一个context代表一个单独的逆向配置 -->
+	<context id="TestGenerator" targetRuntime="MyBatis3">
+		<commentGenerator>
+			<!-- 取消自动生成注释 -->
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+		<!-- 数据库连接信息 -->
+		<jdbcConnection 
+			driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://localhost:3306/mybatis_test"
+			userId="root"
+			password="12345">
+		</jdbcConnection>
+		
+		<!-- 把JDBC DECIMAL和NUMERIC类型解析为Integer,为true时是解析成BigDecimal -->
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		
+		<!-- 配置生成的PO类(实体类)的位置，targetProject指示生成的位置 -->
+		<javaModelGenerator targetPackage="com.sm.po"
+			targetProject=".\src">
+			<!-- 是否让schema作为包的后缀 -->
+			<property name="enableSubPackages" value="false" />
+			<!-- 数据库查询结果清除前后的空格 -->
+			<property name="trimStrings" value="true" /> 
+		</javaModelGenerator>
+		
+		<!-- 配置生成的mapper映射配置文件位置 -->
+		<sqlMapGenerator targetPackage="com.sm.mapper"
+			targetProject=".\src">
+			<property name="enableSubPackages" value="false" />
+		</sqlMapGenerator>
+		
+		<!-- 配置生成的Mapper代理接口位置 -->
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.sm.mapper"
+			targetProject=".\src">
+			<property name="enableSubPackages" value="false" />
+		</javaClientGenerator>
+		
+		<!-- 指定操作的数据库表 -->
+		<table tableName="user"></table>
+	</context>
+</generatorConfiguration>
