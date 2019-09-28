@@ -24,10 +24,10 @@
 		<!-- 使用SimpleControllerHandlerAdapter,因为其支持所有实现了Controller接口的Handler控制器 -->
 		<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
 		
-		<!-- 配置一个可以被url映射的Handler -->
-		<bean name="/queryUsersTest.action" class="com.mvc.controller.UserControllerTest" />
-		
 		<!-- 视图解析器ViewResolver -->
 		<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" />
-		
+				
+		<!-- 配置一个可以被url映射的Handler -->
+		<bean name="/queryUsersTest.action" class="com.mvc.controller.UserControllerTest" />
+	
 </beans>
