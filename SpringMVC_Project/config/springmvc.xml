@@ -8,7 +8,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 		http://www.springframework.org/schema/mvc
-		http://www.springframework.org/schema/mvc/spring-mvc-3.2xsd
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context-3.2.xsd
 		http://www.springframework.org/schema/aop
@@ -18,16 +18,45 @@
 		
 		<!-- 处理器映射器 -->
 		<!-- 将bean的name作为url进行查找 -->
-		<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
+		<!-- <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" /> -->
 		
 		<!-- 处理器适配器HandlerAdapter -->
 		<!-- 使用SimpleControllerHandlerAdapter,因为其支持所有实现了Controller接口的Handler控制器 -->
-		<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
+		<!-- <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" /> -->
 		
 		<!-- 视图解析器ViewResolver -->
 		<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" />
-				
+			
 		<!-- 配置一个可以被url映射的Handler -->
-		<bean name="/queryUsersTest.action" class="com.mvc.controller.UserControllerTest" />
-	
+		<!-- <bean name="/queryUsersTest.action" class="com.mvc.controller.UserControllerTest" /> -->
+		
+		<!-- 非注解形式配置处理器映射器 -->
+		<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+			<!-- url映射 -->
+			<property name="mappings">
+				<props>
+				<!-- 将不同的url请求映射响应的Controller处理器      -->
+					<prop key="/queryUsersTest1.action">userController</prop>
+					<prop key="/queryUsersTest2.action">userController</prop>
+					<prop key="/queryUsersTest3.action">userController2</prop>
+				</props>
+			</property>
+		</bean>
+		<!-- 配置被url映射的Handler -->
+		<bean id="userController" class="com.mvc.controller.UserControllerTest" />
+		<bean id="userController2" class="com.mvc.controller.UserControllerTest2" />
+		
+		<!-- 非注解形式配置处理器适配器 -->
+		<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter" />
+
+		<!-- 注解形式配置映射器和适配器 -->
+		<!-- 注解形式的处理器映射器 -->
+		<!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" /> -->
+		<!-- 注解形式的处理器适配器 -->
+		<!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" /> -->
+		<!-- 简写方式 -->
+		<mvc:annotation-driven></mvc:annotation-driven>
+		<bean class="com.mvc.controller.annotateControllerTest"></bean>
+		<!-- 或者使用扫描配置,对包下的所有类扫描 -->
+		<!-- <context:component-scan base-package="com.mvc.controller"></context:component-scan> -->
 </beans>
