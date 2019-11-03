@@ -1,14 +1,20 @@
 package com.mvc.model;
 
 import java.util.Date;
+import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotEmpty;
+import com.mvc.validator.group.UserGroup1;
+import com.mvc.validator.group.UserGroup2;
 
 public class User {
+    
     private Integer id;
-
+    @Size(min=1, max=20, message="{user.name.length.error}", 
+    		groups= {UserGroup1.class})
     private String username;
 
     private String password;
-
+    @NotEmpty(message="{user.gender.isEmpty}", groups= {UserGroup2.class})
     private String gender;
 
     private String email;
