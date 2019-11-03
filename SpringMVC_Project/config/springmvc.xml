@@ -57,11 +57,35 @@
 		<!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" /> -->
 		<!-- 注解形式的处理器适配器 -->
 		<!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" /> -->
+		
 		<!-- 简写方式 同时配置注解的处理器映射器和适配器 -->
-		<mvc:annotation-driven></mvc:annotation-driven>
-		<!-- <bean class="com.mvc.controller.annotateControllerTest"></bean>
-		<bean class="com.mvc.controller.queryUserController"></bean>
-		<bean class="com.mvc.controller.queryUserTest"></bean> -->
+		<!-- 添加名为"myValidator的校验器" -->
+		<mvc:annotation-driven  validator="validator"></mvc:annotation-driven>
+		
+		<!-- 配置校验器 -->
+		<bean id="validator" 
+			class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+			<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
+			<property name="validationMessageSource" ref="messageSource" />
+		</bean>
+		
+		<!-- 配置校验资源文件 -->
+		<bean id="messageSource" 
+			class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+			<property name="basenames">
+				<list>
+					<value>classpath:UserValidationMessages</value>
+				</list>
+			</property>
+			<property name="fileEncodings" value="utf-8" /> <!-- 资源文件编码格式 -->
+			<property name="cacheSeconds" value="120" /> <!-- 资源文件内容的缓存事件1 -->
+		</bean>
+		
+		<!-- 字符串转为Date类型的Java类 -->
+		<!-- <bean id="conversionService" 
+			class="org.springframework.format.support.FormattingConversionService-FactoryBean">
+		</bean> -->
+		
 		<!-- 或者使用扫描配置,对包下的所有类扫描 -->
 		<context:component-scan base-package="com.mvc.controller"></context:component-scan>
 </beans>
