@@ -58,8 +58,8 @@
 		<!-- 注解形式的处理器适配器 -->
 		<!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" /> -->
 		
-		<!-- 简写方式 同时配置注解的处理器映射器和适配器 -->
-		<!-- 添加名为"myValidator的校验器" -->
+		<!-- 简写方式 配置注解的处理器映射器和适配器 -->
+		<!-- 添加名为"validator的校验器" -->
 		<mvc:annotation-driven  validator="validator"></mvc:annotation-driven>
 		
 		<!-- 配置校验器 -->
@@ -88,4 +88,7 @@
 		
 		<!-- 或者使用扫描配置,对包下的所有类扫描 -->
 		<context:component-scan base-package="com.mvc.controller"></context:component-scan>
+		
+		<!-- 配置全局异常处理器 -->
+		<bean class="com.mvc.exception.UserExceptionResolver"></bean>
 </beans>
